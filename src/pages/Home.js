@@ -255,7 +255,7 @@ const Home = () => {
   return (
     <div className="min-h-screen" data-testid="home-page">
       {/* Hero Section */}
-  <section className=" relative min-h-[90vh] flex items-center justify-left overflow-hidden" >
+  <section className="bg-[#222] relative min-h-[90vh] flex items-center justify-left overflow-hidden" >
 
       <video
     autoPlay
