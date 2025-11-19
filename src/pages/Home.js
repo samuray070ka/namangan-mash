@@ -671,7 +671,7 @@ scene.add(bannerMesh);
 </section>
 
       {/* YANGI BO'LIM: 3D Zavod + "NAMANGAN MASH" banner */}
-      <div className='max-[1000px]:hidden'>
+      <div className='max-sm:w-full'>
         <section className="min-h-screen bg-gradient-to-b from-[#222] to-[#4545DA] relative overflow-hidden ">
           <canvas ref={factoryCanvasRef} className="absolute inset-0 w-full h-full opacity-100" />
         </section>
