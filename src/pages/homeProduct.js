@@ -51,11 +51,11 @@ const HomeProducts = () => {
           </h2>
           <p className="text-lg text-gray-700 leading-relaxed max-w-4xl mx-auto">
             {language === 'uz'
-              ? 'Kompaniyamiz quvur armaturalari va boshqa mahsulotlarni ishlab chiqaruvchilardan to\'g\'ridan-to\'g\'ri yetkazib berish bilan shug\'ullanadi. Biz mijozlarimizga eng yuqori sifat va ishonchli xizmatni taqdim etamiz.'
-              : 'Наша компания занимается прямыми поставками трубной арматуры и других продуктов от производителей. Мы предоставляем нашим клиентам высочайшее качество и надежный сервис.'}
+              ? 'Biz mijozlarimizga eng yuqori sifat va ishonchli xizmatni taqdim etamiz.'
+              : 'Мы предоставляем нашим клиентам высочайшее качество и надежный сервис.'}
           </p>
         </div>
-        
+
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
@@ -81,21 +81,21 @@ const HomeProducts = () => {
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                  <h3 className="text-xl font-bold text-gray-900 mb-[1px] line-clamp-2">
                     {language === 'uz' ? product.name_uz : product.name_ru}
                   </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-3">
+                  <p className="text-gray-600 mb-[1px] line-clamp-3">
                     {language === 'uz' ? product.description_uz : product.description_ru}
                   </p>
                   {product.price && (
-                    <div className="text-2xl font-bold text-blue-600 mb-4">
+                    <div className="text-2xl font-bold text-blue-600 mb-[8px]">
                       ${product.price.toLocaleString()}
                     </div>
                   )}
                   <Link
                     to={`/products/${product.id}`}
                     data-testid={`view-product-${product.id}`}
-                    className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors group/link"
+                    className="inline-flex items-center relative bottom-0 left-0 text-blue-600 font-semibold hover:text-blue-700 transition-colors group/link"
                   >
                     <span>{t('Batafsil', 'Подробнее')}</span>
                     <ChevronRight className="w-5 h-5 ml-1 group-hover/link:translate-x-1 transition-transform" />
@@ -136,7 +136,7 @@ const HomeProducts = () => {
             </p>
           </div>
         )}
-        
+
 
         {loading && (
           <div className="text-center py-20">

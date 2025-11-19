@@ -56,6 +56,7 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen py-12" data-testid="product-detail-page">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+
         {/* Back Button */}
         <Link
           to="/products"
@@ -67,8 +68,9 @@ const ProductDetail = () => {
         </Link>
 
         <div className="grid lg:grid-cols-2 gap-12">
+
           {/* Image */}
-          <div className="relative">
+          <div className="relative min-w-0">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-3xl blur-3xl opacity-20"></div>
             <img
               src={product.image}
@@ -83,16 +85,23 @@ const ProductDetail = () => {
           </div>
 
           {/* Details */}
-          <div className="space-y-6">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-4" data-testid="product-name">
+          <div className="space-y-6 min-w-0">
+            <div className="min-w-0">
+
+              {/* FIXED TITLE */}
+              <h1
+                className="block w-full max-w-full text-4xl font-bold text-gray-900 mb-4 break-words break-all whitespace-normal"
+                data-testid="product-name"
+              >
                 {language === 'uz' ? product.name_uz : product.name_ru}
               </h1>
+
               {product.price && (
                 <div className="text-4xl font-bold text-blue-600 mb-6" data-testid="product-price">
                   ${product.price.toLocaleString()}
                 </div>
               )}
+
               <p className="text-lg text-gray-600 leading-relaxed" data-testid="product-description">
                 {language === 'uz' ? product.content_uz : product.content_ru}
               </p>
@@ -111,9 +120,9 @@ const ProductDetail = () => {
                     className="flex items-start space-x-3 pb-4 border-b border-gray-200 last:border-0"
                   >
                     <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <div className="flex-1">
-                      <div className="font-semibold text-gray-900">{key}</div>
-                      <div className="text-gray-600">{value}</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-semibold text-gray-900 break-words">{key}</div>
+                      <div className="text-gray-600 break-words">{value}</div>
                     </div>
                   </div>
                 ))}
@@ -139,6 +148,7 @@ const ProductDetail = () => {
                 {t('Bog\'lanish', 'Связаться')}
               </Link>
             </div>
+
           </div>
         </div>
       </div>

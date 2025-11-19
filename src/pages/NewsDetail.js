@@ -88,9 +88,10 @@ const NewsDetail = () => {
                 </span>
               </div>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6" data-testid="news-title">
-              {language === 'uz' ? newsItem.title_uz : newsItem.title_ru}
-            </h1>
+            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 break-words whitespace-normal">
+  {language === 'uz' ? newsItem.title_uz : newsItem.title_ru}
+</h1>
+
           </div>
 
           {/* Featured Image */}

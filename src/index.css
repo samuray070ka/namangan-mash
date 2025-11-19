@@ -156,6 +156,7 @@ code {
     opacity: 0;
     transform: translateY(40px) scale(0.95);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transition-delay: 1s;
 }
 
 .fade-zoom-up.show {

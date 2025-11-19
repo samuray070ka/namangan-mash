@@ -269,7 +269,7 @@ const ProductsManagement = () => {
                     </div>
                   </div>
                   <div className="p-4">
-                    <h3 className="text-lg font-semibold text-gray-100 mb-2">{product.name_uz}</h3>
+                    <h3 className="text-lg font-semibold break-words whitespace-normal text-gray-100 mb-2">{product.name_uz}</h3>
                     <p className="text-gray-400 text-sm line-clamp-2">{product.content_uz || product.content_ru}</p>
                     <div className="flex justify-between items-center mt-3">
                       <span className="text-xs bg-blue-600/20 text-blue-400 px-2 py-1 rounded-full">
@@ -291,7 +291,7 @@ const ProductsManagement = () => {
             {viewingProduct && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-bold">{viewingProduct.name_uz}</DialogTitle>
+                  <DialogTitle className="text-2xl w-[90%] break-all whitespace-normal font-bold">{viewingProduct.name_uz}</DialogTitle>
                 </DialogHeader>
                 <img
                   src={viewingProduct.image || viewingProduct.image_url || ''}

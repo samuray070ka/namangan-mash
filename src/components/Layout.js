@@ -6,6 +6,8 @@ import { Instagram, Facebook, Youtube, Send } from 'lucide-react';
 import { AiOutlineUser } from "react-icons/ai";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import Carousel from './carusel';
+import Uz from "../components/assets/uzf.jpg"
+import Ru from "../components/assets/ruf.jpg"
 
 const Layout = () => {
   const { language, toggleLanguage, t } = useLanguage();
@@ -17,8 +19,8 @@ const Layout = () => {
 
   // Til tanlash uchun ma'lumotlar
   const languages = [
-    { code: 'uz', flag: 'https://flagcdn.com/w20/uz.png', name: "O'zbek" },
-    { code: 'ru', flag: 'https://flagcdn.com/w20/ru.png', name: 'Русский' }
+    { code: 'uz', flag: Uz, name: "O'zbek" },
+    { code: 'ru', flag: Ru, name: 'Русский' }
   ];
 
   const currentLang = languages.find(lang => lang.code === language) || languages[0];
@@ -60,7 +62,7 @@ const Layout = () => {
     { path: '/news', label: t('Yangiliklar', 'Новости') },
     { path: '/contact', label: t('Aloqa', 'Контакты') }
   ];
-  
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50">
@@ -86,16 +88,17 @@ const Layout = () => {
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur-md opacity-75 group-hover:opacity-100 transition-opacity"></div>
                 <div className="relative bg-gradient-to-r from-blue-600 to-indigo-600 p-2.5 rounded-xl transform group-hover:scale-110 transition-transform duration-300">
-                  <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-7 h-7 text-white max-sm:w-5 max-sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
                   </svg>
                 </div>
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent
+                max-sm:text-[18px]">
                   NamanganMash
                 </h1>
-                <p className="text-xs text-gray-500">{t('Sanoat uskunalari', 'Промышленное оборудование')}</p>
+                <p className="text-xs max-sm:text-[12px] text-gray-500">{t('Sanoat uskunalari', 'Промышленное оборудование')}</p>
               </div>
             </Link>
 
@@ -116,10 +119,10 @@ const Layout = () => {
                 </Link>
               ))}
             </div>
-            
+
 
             {/* Language Selector & User */}
-            <div className="flex items-center space-x-3 animate-nav_logo2">
+            <div className="flex items-center space-x-3 max-sm:space-x-1 animate-nav_logo2">
               {/* Language Selector */}
               <div className="relative" ref={dropdownRef}>
                 <div
@@ -151,15 +154,17 @@ const Layout = () => {
                 {dropdownOpen && (
                   <div className="absolute top-14 right-0 bg-blue-600 rounded-lg shadow-lg py-2 w-28 z-50 animate-fade-in
                     md:top-12 md:w-[85px] md:py-1.5
-                    max-sm:top-10 max-sm:w-20 sm:py-1">
+                    max-sm:top-10 max-sm:w-[70px] max-sm:py-1
+                    sm:top-10 sm:w-[88px] sm:py-1">
                     {languages
                       .filter((lang) => lang.code !== language)
                       .map((lang) => (
                         <div
                           key={lang.code}
-                          className="flex items-center gap-2 px-3 py-2 cursor-pointer transition-all duration-200
+                          className="flex items-center justify-around gap-2 px-3 py-2 cursor-pointer transition-all duration-200
                             md:gap-1.5 md:px-2 md:py-1.5
-                            max-sm:gap-1 max-sm:px-1.5 max-sm:py-1"
+                            max-sm:gap-1 max-sm:px-3 max-sm:py-1
+                            sm:gap-1 sm:px-3 sm:py-1"
                           onClick={() => handleLanguageSelect(lang.code)}
                         >
                           <img
@@ -188,18 +193,19 @@ const Layout = () => {
                 data-testid="mobile-menu-toggle"
                 className="lg:hidden p-2 rounded-lg text-white bg-blue-600 transition-colors
                   md:p-2.5
-                  sm:p-2"
+                  sm:p-2
+                  max-sm:p-2.5"
               >
                 {mobileMenuOpen ?
-                  <X className="w-6 h-6 md:w-5 md:h-5 sm:w-4 sm:h-4 max-sm:w-3 max-sm:h-3" /> :
+                  <X className="w-6 h-6 md:w-5 md:h-5 sm:w-5 sm:h-5 max-sm:h-4 max-sm:w-4 sm:text-[16px]" /> :
                   <Menu className="w-6 h-6 md:w-5 md:h-5 sm:w-5 sm:h-5 max-sm:w-4 max-sm:h-4" />
                 }
               </button>
 
                             {/* User Profile */}
               <button className='relative bg-gradient-to-r from-blue-600 to-indigo-600 text-white transform hover:scale-105 transition-all duration-300 rounded-full text-lg p-2 lg:p-3 group cursor-pointer animate-nav_logo2
-                md:p-2.5 md:text-base
-                max-sm:p-2.5 max-sm:text-[17px]'>
+                md:p-3 md:text-base
+                max-sm:p-3 max-sm:text-[20px]'>
                 <Link to={'/login'}>
                   <AiOutlineUser className="md:w-4 md:h-4 max-sm:w-3 max-sm:h-3" />
 
@@ -207,7 +213,7 @@ const Layout = () => {
               </button>
             </div>
           </div>
-          
+
 
           {/* Mobile Navigation */}
           {mobileMenuOpen && (
@@ -293,7 +299,7 @@ const Layout = () => {
                 </div>
               </div>
             </div>
-            
+
 
             <div>
               <h4 className="text-lg font-semibold mb-4

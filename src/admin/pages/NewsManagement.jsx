@@ -220,7 +220,7 @@ const NewsManagement = () => {
                       {item.title_uz}
                     </h3>
                     <p className="text-gray-400 text-sm mb-3 line-clamp-2">{item.content_uz}</p>
-                    
+
                     <div className="flex items-center text-gray-500 text-sm">
                       <Calendar size={14} className="mr-2" />
                       {new Date(item.created_at).toLocaleDateString('uz-UZ', {
@@ -305,7 +305,7 @@ const NewsManagement = () => {
                   required
                 />
               </div>
-              
+
 
               {/* Image Upload */}
               <div className="space-y-2">
@@ -354,7 +354,7 @@ const NewsManagement = () => {
             {viewingNews && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-bold">{viewingNews.title_uz}</DialogTitle>
+                  <DialogTitle className="text-2xl w-[90%] break-all whitespace-normal font-bold">{viewingNews.title_uz}</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                   <img

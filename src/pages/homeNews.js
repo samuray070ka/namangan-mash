@@ -68,8 +68,6 @@ const HomeNews = () => {
               : 'Последние и актуальные новости'}
           </p>
         </div>
-        
-
         {news.length > 0 && (
           <>
             {/* News Grid */}
@@ -119,12 +117,13 @@ const HomeNews = () => {
               <div className="text-center mt-8">
                 <button
                   onClick={handleShowMore}
-                  className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105"
+                  className="px-8 py-3 bg-gradient-to-r from-gray-700 via-blue-900 to-indigo-900 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105"
                 >
                   {language === 'uz' ? 'Barcha yangiliklarni ko\'rish' : 'Посмотреть все новости'}
                 </button>
               </div>
             )}
+
           </>
         )}
 
