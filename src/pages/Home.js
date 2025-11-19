@@ -77,6 +77,8 @@ const Home = () => {
   const factoryCanvasRef = useRef(null);
   const canvasRef = useRef(null);
 
+  const [showOverlay, setShowOverlay] = useState(true);
+
   // AOS + Stats yuklash
   useEffect(() => {
     AOS.init({ duration: 1200, once: false, mirror: true });
@@ -179,6 +181,12 @@ const Home = () => {
     }
   };
 
+
+
+
+
+
+
   // YANGI: 3D Zavod modeli
   useEffect(() => {
     const canvas = factoryCanvasRef.current;
@@ -204,6 +212,8 @@ const Home = () => {
     controls.minDistance = 0.1;
     controls.maxDistance = 100;
     controls.maxPolarAngle = Math.PI / 2.1;
+
+
 
     // Yorug'lik
     const hemi = new THREE.HemisphereLight(0xaaaaFF, 0x444466, 0.9);
@@ -670,11 +680,38 @@ scene.add(bannerMesh);
   </div>
 </section>
 
-      {/* YANGI BO'LIM: 3D Zavod + "NAMANGAN MASH" banner */}
-      <div className='max-sm:w-full'>
-        <section className="min-h-screen bg-gradient-to-b from-[#222] to-[#4545DA] relative overflow-hidden ">
-          <canvas ref={factoryCanvasRef} className="absolute inset-0 w-full h-full opacity-100" />
-        </section>
+      {/* 3D Zavod bo'limi – faqat overlay qo'shildi */}
+      <div className="relative min-h-[83vh] bg-gradient-to-b from-[#222] to-[#4545DA] overflow-hidden">
+        <canvas ref={factoryCanvasRef} className="absolute inset-0 w-full h-full" />
+
+        {/* Siz aytgan overlay */}
+        {showOverlay && (
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-40">
+            <div className="text-center px-6">
+              <h2 className="text-5xl sm:text-[60px] font-bold text-white mb-12 drop-shadow-2xl
+              max-sm:text-[40px] ">
+                NAMANGAN <span className="text-yellow-400">MASH</span>
+              </h2>
+              <button
+                onClick={() => setShowOverlay(false)}
+                className="px-16 py-6 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white text-2xl font-bold sm:px-8 sm:text-[18px] sm:py-3 rounded-full shadow-2xl hover:scale-110 transition-all duration-300
+                 max-sm:px-5 max-sm:text-[15px] max-sm:py-3"
+              >
+                {t("3D Zavodni ko'rish", "Посмотреть 3D завод")}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Yopish tugmasi */}
+        {!showOverlay && (
+          <button
+            onClick={() => setShowOverlay(true)}
+            className="absolute right-6 top-6 max-sm:px-5 max-sm:py-2 max-sm:text-[15px] z-40 bg-black/50 backdrop-blur-md text-white px-8 py-4 rounded-full border border-white/40 hover:bg-white hover:text-black transition-all text-lg font-medium"
+          >
+            {t("3Dni tark etish", "Покидая 3D")}
+          </button>
+        )}
       </div>
 
      {/* product  */}

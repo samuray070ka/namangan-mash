@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { ProtectedRoute } from './admin/components/ProtectedRoute';
@@ -12,9 +12,10 @@ import NewsManagement from './admin/pages/NewsManagement';
 import CompanyInfoManagement from './admin/pages/CompanyInfoManagement';
 import ContactsManagement from './admin/pages/ContactsManagement';
 import '@/App.css';
+import { FaChevronUp } from "react-icons/fa";
 
 // Lazy-loaded pages (foydalanuvchi qismi)
-const Home = lazy(() => import('./pages/Home')); 
+const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
 const Products = lazy(() => import('./pages/Products'));
 const ProductDetail = lazy(() => import('./pages/ProductDetail'));
@@ -26,22 +27,54 @@ const Contact = lazy(() => import('./pages/Contact'));
 const LoadingSpinner = () => (
   <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50">
     <div className="relative">
-      {/* Katta spinner */}
       <div
         className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"
-        style={{ animationDuration: '5s' }} // 5 soniyaga cho‘zildi
+        style={{ animationDuration: '5s' }}
       ></div>
-
-      {/* Kichkina spinner — hozircha komentga olingan */}
-
-      {/* <div
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"
-        style={{ animationDirection: 'reverse', animationDuration: '0.8s' }}
-      ></div> */}
-
     </div>
   </div>
 );
+
+// Scroll to top komponenti
+const ScrollToTopButton = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Scroll pozitsiyasini kuzatish
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
+
+  const handleHome = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  return (
+    <div className={`fixed bottom-5 right-5 z-50 transition-all duration-500 ease-in-out ${
+      isVisible
+        ? 'opacity-100 transform translate-y-0'
+        : 'opacity-0 transform translate-y-10 pointer-events-none'
+    }`}>
+      <span
+        onClick={handleHome}
+        className="cursor-pointer flex bg-blue-600 text-white rounded-full p-3 hover:bg-blue-700 transition-colors duration-300 shadow-lg hover:shadow-xl"
+      >
+        <FaChevronUp />
+      </span>
+    </div>
+  );
+};
 
 function App() {
   return (
@@ -109,6 +142,10 @@ function App() {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
+
+          {/* Scroll to top tugmasi - endi faqat scroll qilinganda ko'rinadi */}
+          <ScrollToTopButton />
+
           <Toaster position="top-right" richColors />
         </BrowserRouter>
       </AdminAuthProvider>
