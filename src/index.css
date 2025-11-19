@@ -134,11 +134,7 @@ code {
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-.fade-up.show {
-    opacity: 1;
-    transform: translateY(0);
-    animation: fadeUp 0.8s ease-out forwards;
-}
+    
 
 @keyframes fadeZoomUp {
     0% {
@@ -159,11 +155,6 @@ code {
     transition-delay: 1s;
 }
 
-.fade-zoom-up.show {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    animation: fadeZoomUp 0.8s ease-out forwards;
-}
 .animate-hero_animated{
     animation: hero .8s ease-in;
 }

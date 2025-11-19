@@ -4,7 +4,6 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { ArrowRight, Award, Users, Globe, TrendingUp } from 'lucide-react';
 import axios from 'axios';
 import * as THREE from 'three';
-// YANGI IMPORT: OrbitControls (three.js examples dan)
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -180,7 +179,7 @@ const Home = () => {
     }
   };
 
-  // YANGI: 3D Zavod modeli (interaktiv, OrbitControls, tutun, yoritilgan derazalar, aylanuvchi tishli g'ildiraklar)
+  // YANGI: 3D Zavod modeli
   useEffect(() => {
     const canvas = factoryCanvasRef.current;
     if (!canvas) return;
@@ -202,8 +201,8 @@ const Home = () => {
     controls.target.set(0, 6, 0);
     controls.enableDamping = true;
     controls.dampingFactor = 0.07;
-    controls.minDistance = 0.1; // Yaqinlashtirish uchun kichik qiymat, ichiga kirishga imkon beradi
-    controls.maxDistance = 100; // Uzoqlashtirish cheklovi, uzoqqa ketmaydi
+    controls.minDistance = 0.1;
+    controls.maxDistance = 100;
     controls.maxPolarAngle = Math.PI / 2.1;
 
     // Yorug'lik
@@ -215,7 +214,7 @@ const Home = () => {
     dirLight.shadow.mapSize.set(2048, 2048);
     scene.add(dirLight);
 
-    // Ichki yoritish (zavod ichida)
+    // Ichki yoritish
     const interiorLight = new THREE.PointLight(0xffffff, 1.2, 50);
     interiorLight.position.set(0, 5, 0);
     scene.add(interiorLight);
@@ -230,7 +229,7 @@ const Home = () => {
     scene.add(ground);
 
     // Bino materiallari
-    const buildingMat = (c) => new THREE.MeshStandardMaterial({ color: c, metalness: 0.15, roughness: 0.85, transparent: true, opacity: 0.8 }); // Yarmi shaffof qilib, ichini ko'rish uchun
+    const buildingMat = (c) => new THREE.MeshStandardMaterial({ color: c, metalness: 0.15, roughness: 0.85, transparent: true, opacity: 0.8 });
     const windowMat = new THREE.MeshStandardMaterial({ color: 0xffeeaa, emissive: 0xffaa33, emissiveIntensity: 1.2 });
 
     // Binolar
@@ -248,7 +247,7 @@ const Home = () => {
     const left = addBuilding([-18, 4, 6], [14, 8, 18], 0x2c7bc4);
     const right = addBuilding([20, 5, -10], [16, 10, 20], 0x4545DA);
 
-    // Derazalar (faqat old tomondan, yorug‘lik effekti)
+    // Derazalar
     const winGeo = new THREE.BoxGeometry(1.8, 1.8, 0.3);
     buildings.forEach(b => {
       const { w, h, d } = { w: b.size[0], h: b.size[1], d: b.size[2] };
@@ -311,12 +310,10 @@ const Home = () => {
       smoke.push({ points, positions, velocities, baseY: ch.topY - 3, ...ch });
     });
 
-    // Aylanuvchi tishli g'ildiraklar (gears) - olib tashlandi, kerak emas deb faraz qilib
-
-    // Zavod ichidagi uskunalarni qo'shish (batafsil, hayotdagiga o'xshatib)
+    // Zavod ichidagi uskunalar
     const equipmentGroup = new THREE.Group();
 
-    // 1. Tel yoki mix yasash uskunalari: sim halqalari (torus), motorli dastgoh (box va cylinder)
+    // 1. Tel yoki mix yasash uskunalari
     const wireMachineMat = new THREE.MeshStandardMaterial({ color: 0x555555, metalness: 0.6 });
     const dastgohGeo = new THREE.BoxGeometry(3, 4, 3);
     const dastgoh = new THREE.Mesh(dastgohGeo, wireMachineMat);
@@ -332,7 +329,7 @@ const Home = () => {
       equipmentGroup.add(halqa);
     }
 
-    // 2. Issiq po'lat prokat zavodi: qizil issiq plitalar (box, emissive), gaz torchlari (cone)
+    // 2. Issiq po'lat prokat zavodi
     const prokatPlateGeo = new THREE.BoxGeometry(4, 0.5, 6);
     const prokatPlateMat = new THREE.MeshStandardMaterial({ color: 0xff4500, emissive: 0xff4500, emissiveIntensity: 0.8 });
     const prokatPlate = new THREE.Mesh(prokatPlateGeo, prokatPlateMat);
@@ -348,7 +345,7 @@ const Home = () => {
       equipmentGroup.add(torch);
     }
 
-    // 3. Po'lat quvurlar saqlash joyi: uzun po'lat quvurlar (cylinderlar, stack qilingan)
+    // 3. Po'lat quvurlar saqlash joyi
     const quvurGeo = new THREE.CylinderGeometry(0.4, 0.4, 10, 32);
     const quvurMat = new THREE.MeshStandardMaterial({ color: 0x808080, metalness: 0.7 });
     for (let i = 0; i < 5; i++) {
@@ -360,7 +357,7 @@ const Home = () => {
       }
     }
 
-    // 4. Issiq po'lat kesish uskunalari: issiq relslar (box), olovli kesish (cone va particles)
+    // 4. Issiq po'lat kesish uskunalari
     const relsGeo = new THREE.BoxGeometry(12, 0.3, 0.5);
     const relsMat = new THREE.MeshStandardMaterial({ color: 0xff8c00, emissive: 0xff8c00, emissiveIntensity: 0.6 });
     const rels = new THREE.Mesh(relsGeo, relsMat);
@@ -386,7 +383,7 @@ const Home = () => {
     olovParticles.position.set(0, 1, 10);
     equipmentGroup.add(olovParticles);
 
-    // 5. Po'lat profil va nur saqlash: po'lat nur va kanallar (uzun boxlar, stack)
+    // 5. Po'lat profil va nur saqlash
     const profilGeo = new THREE.BoxGeometry(8, 0.4, 0.4);
     const profilMat = new THREE.MeshStandardMaterial({ color: 0x696969, metalness: 0.8 });
     for (let i = 0; i < 4; i++) {
@@ -397,9 +394,56 @@ const Home = () => {
       }
     }
 
-    // Animatsiya uchun uskunalarni aylantirish (masalan, konveyerni harakatlantirish)
-    equipmentGroup.position.set(0, 0, 0); // Asosiy bino ichida
+    equipmentGroup.position.set(0, 0, 0);
     scene.add(equipmentGroup);
+
+
+// YANGI: "NAMANGAN MASH" banner - orqa tomonda, kichik va animatsiyasiz
+const createBanner = () => {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  canvas.width = 500;
+  canvas.height = 100;
+
+  // Banner orqa foni - YANGI RANG
+  const gradient = context.createLinearGradient(0, 0, canvas.width, 0);
+  gradient.addColorStop(0, '#222'); // Yashil rang
+
+
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Banner chegarasi
+  context.strokeStyle = '#ffffff';
+  context.lineWidth = 1;
+  context.strokeRect(3, 3, canvas.width - 6, canvas.height - 6);
+
+  // Asosiy yozuv
+  context.font = 'bold 40px Arial';
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.fillStyle = '#ffffff';
+  context.fillText('NAMANGAN MASH', canvas.width / 2, canvas.height / 2);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  const material = new THREE.MeshBasicMaterial({
+    map: texture,
+    transparent: true,
+    side: THREE.DoubleSide
+  });
+
+  const geometry = new THREE.PlaneGeometry(15, 3); // Kichik banner
+  const bannerMesh = new THREE.Mesh(geometry, material);
+
+  // ORQA TOMONGA joylash - biroz pastroq
+  bannerMesh.position.set(0, 12, 18); // z: 18 (orqa tomonga)
+
+  return bannerMesh;
+};
+
+const bannerMesh = createBanner();
+scene.add(bannerMesh);
+
 
     // Animatsiya
     const clock = new THREE.Clock();
@@ -409,23 +453,20 @@ const Home = () => {
       controls.update();
 
       // Uskunalarni animatsiya qilish
-      // 1. Tel yasash: halqalarni aylantirish
       buildings[0].children?.forEach((child, idx) => {
         if (idx > 0) child.rotation.y += delta * 0.5;
       });
 
-      // 2. Prokat: plitani siljitish
       prokatPlate.position.x += delta * 0.3;
       if (prokatPlate.position.x > 5) prokatPlate.position.x = -5;
 
-      // 3. Quvurlar: eng yuqoridagini aylantirish
-      equipmentGroup.children[10].rotation.y += delta * 0.2; // Misol uchun
+      equipmentGroup.children[10].rotation.y += delta * 0.2;
 
-      // 4. Kesish: olov pulsatsiyasi
       olovParticles.scale.set(1 + Math.sin(clock.elapsedTime * 5) * 0.2, 1 + Math.sin(clock.elapsedTime * 5) * 0.2, 1);
 
-      // 5. Profil: stackni biroz tebratish
       equipmentGroup.children[15].position.y += Math.sin(clock.elapsedTime) * 0.01;
+
+      // Banner animatsiya QILINMAYDI - statsionar turadi
 
       // Tutun harakati
       smoke.forEach(s => {
@@ -521,7 +562,7 @@ const Home = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        setVisible2(entry.isIntersecting); // har safar ishlaydi
+        setVisible2(entry.isIntersecting);
       },
       { threshold: 0.4 }
     );
@@ -539,7 +580,6 @@ const Home = () => {
     <div className="min-h-screen" data-testid="home-page">
       {/* Hero Section */}
       <section className="bg-[#222] relative min-h-[90vh] flex items-center justify-left overflow-hidden" >
-
         <video
           autoPlay
           loop
@@ -550,8 +590,6 @@ const Home = () => {
           <source src={video} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-
-        {/* <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" /> */}
         <div className=" animate-hero_animated max-sm:px-4 p-7 z-10 text-left rounded-[25px] sm:pl-[-60px]">
           <h1 className={`text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight transition-transform duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
             {t('Sanoat kelajagini', "Будущее промышленности")}
@@ -575,189 +613,115 @@ const Home = () => {
         </div>
       </section>
 
-      {/* New Achievements Section */}
-      <section className="py-20 bg-[#4545DA] relative overflow-hidden">
-        <canvas className="absolute inset-0 w-full h-full opacity-20" ref={useRef(null)} />
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16" data-aos="fade-up" data-aos-delay="100">
-            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4 drop-shadow-lg">
-              {t('Bizning yutuqlarimiz', 'Наши достижения')}
-            </h2>
-            <p className="text-xl text-white max-w-2xl mx-auto">
-              {t('NamanganMash zavodining sanoatdagi muvaffaqiyat ko\'rsatkichlari', 'Показатели успеха завода NamanganMash в промышленности')}
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className='
-                bg-gradient-to-br from-blue-800/20
-               to-indigo-900/20 backdrop-blur-xl border border-blue-400/30 rounded-3xl overflow-hidden
-               hover:from-blue-600/30 hover:to-indigo-700/30 hover:border-blue-300/50
-               transform hover:-translate-y-2 hover:rotate-1 hover:scale-105
-               transition-all duration-500 ease-out cursor-pointer
-               shadow-[0_10px_30px_rgba(59,130,246,0.2)] hover:shadow-[0_20px_50px_rgba(99,102,241,0.4)]'
-             data-aos="zoom-in" data-aos-delay="200">
-              <CounterCard className="text-white" label={t('Mahsulotlar', 'Продукты')} value={stats.products} />
-            </div>
-            <div className='
-                bg-gradient-to-br from-blue-800/20
-               to-indigo-900/20 backdrop-blur-xl border border-blue-400/30 rounded-3xl overflow-hidden
-               hover:from-blue-600/30 hover:to-indigo-700/30 hover:border-blue-300/50
-               transform hover:-translate-y-2 hover:rotate-1 hover:scale-105
-               transition-all duration-500 ease-out cursor-pointer
-               shadow-[0_10px_30px_rgba(59,130,246,0.2)] hover:shadow-[0_20px_50px_rgba(99,102,241,0.4)]' data-aos="zoom-in" data-aos-delay="300">
-              <CounterCard className="text-white" label={t('Xodimlar', 'Сотрудники')} value={500} />
-            </div>
-            <div className='
-                bg-gradient-to-br from-blue-800/20
-               to-indigo-900/20 backdrop-blur-xl border border-blue-400/30 rounded-3xl overflow-hidden
-               hover:from-blue-600/30 hover:to-indigo-700/30 hover:border-blue-300/50
-               transform hover:-translate-y-2 hover:rotate-1 hover:scale-105
-               transition-all duration-500 ease-out cursor-pointer
-               shadow-[0_10px_30px_rgba(59,130,246,0.2)] hover:shadow-[0_20px_50px_rgba(99,102,241,0.4)]' data-aos="zoom-in" data-aos-delay="400">
-              <CounterCard className="text-white" label={t('Mamlakatlar', 'Страны')} value={30} />
-            </div>
-            <div className='
-                bg-gradient-to-br from-blue-800/20
-               to-indigo-900/20 backdrop-blur-xl border border-blue-400/30 rounded-3xl overflow-hidden
-               hover:from-blue-600/30 hover:to-indigo-700/30 hover:border-blue-300/50
-               transform hover:-translate-y-2 hover:rotate-1 hover:scale-105
-               transition-all duration-500 ease-out cursor-pointer
-               shadow-[0_10px_30px_rgba(59,130,246,0.2)] hover:shadow-[0_20px_50px_rgba(99,102,241,0.4)]' data-aos="zoom-in" data-aos-delay="500">
-              <CounterCard className="text-white" label={t('Yangiliklar', 'Новости')} value={stats.news} />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Ushbu yangi bo'lim uchun Three.js init - sanoatga mos gear (tishli) mexanizm animatsiyasi */}
-      {useEffect(() => {
-        const achievementCanvas = document.querySelector('.absolute.inset-0 canvas'); // Yangi canvas ni tanlaymiz
-        if (!achievementCanvas) return;
-
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: achievementCanvas, alpha: true, antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        // Sanoatga mos 3D gear model (oddiy torus va cylinder bilan taqlid qilamiz)
-        const gearGeometry = new THREE.TorusGeometry(1, 0.2, 16, 100);
-        const gearMaterial = new THREE.MeshPhongMaterial({ color: 0x1a5490, shininess: 100, wireframe: true });
-        const gear = new THREE.Mesh(gearGeometry, gearMaterial);
-        scene.add(gear);
-
-        // Qo'shimcha mexanizm qismlari
-        const shaftGeometry = new THREE.CylinderGeometry(0.1, 0.1, 2, 32);
-        const shaftMaterial = new THREE.MeshPhongMaterial({ color: 0x2c7bc4 });
-        const shaft = new THREE.Mesh(shaftGeometry, shaftMaterial);
-        shaft.rotation.x = Math.PI / 2;
-        scene.add(shaft);
-
-        // Partikllar sanoat changlari ta'siri uchun
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 500;
-        const positions = new Float32Array(particlesCount * 3);
-        for (let i = 0; i < particlesCount * 3; i++) {
-          positions[i] = (Math.random() - 0.5) * 5;
-        }
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const particlesMaterial = new THREE.PointsMaterial({ size: 0.01, color: 0xcccccc });
-        const particles = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particles);
-
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
-        directionalLight.position.set(5, 5, 5);
-        scene.add(directionalLight);
-
-        camera.position.z = 4;
-
-        let animationFrameId;
-        const animate = () => {
-          animationFrameId = requestAnimationFrame(animate);
-          gear.rotation.z += 0.005;
-          shaft.rotation.z += 0.003;
-          particles.position.y -= 0.001;
-          if (particles.position.y < -3) particles.position.y = 3;
-          renderer.render(scene, camera);
-        };
-        animate();
-
-        const handleResize = () => {
-          camera.aspect = window.innerWidth / window.innerHeight;
-          camera.updateProjectionMatrix();
-          renderer.setSize(window.innerWidth, window.innerHeight);
-        };
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-          window.removeEventListener('resize', handleResize);
-          cancelAnimationFrame(animationFrameId);
-          gearGeometry.dispose();
-          gearMaterial.dispose();
-          shaftGeometry.dispose();
-          shaftMaterial.dispose();
-          particlesGeometry.dispose();
-          particlesMaterial.dispose();
-          renderer.dispose();
-        };
-      }, [])}
-  <div className='max-[1000px]:hidden'>
-        <h1 className='text-center p-5 text-[30px] text-[#4545DA]'>Bizning Zavodimizni 3D ko'rinishi</h1>
-      {/* YANGI BO'LIM: 3D Zavod + Statistika (CounterCard) */}
-      <section className="min-h-screen bg-gradient-to-b from-[#222] to-[#4545DA] relative overflow-hidden ">
-        <canvas ref={factoryCanvasRef} className="absolute inset-0 w-full h-full opacity-100" />
-      </section>
+{/* New Achievements Section */}
+<section className="py-20 bg-[#4545DA] relative overflow-hidden">
+  <canvas className="absolute inset-0 w-full h-full opacity-20" ref={useRef(null)} />
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div className="text-center mb-16" data-aos="fade-up" data-aos-delay="100" data-aos-once="true">
+      <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4 drop-shadow-lg">
+        {t('Bizning yutuqlarimiz', 'Наши достижения')}
+      </h2>
+      <p className="text-xl text-white max-w-2xl mx-auto">
+        {t('NamanganMash zavodining sanoatdagi muvaffaqiyat ko\'rsatkichlari', 'Показатели успеха завода NamanganMash в промышленности')}
+      </p>
+    </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className='
+          bg-gradient-to-br from-blue-800/20
+         to-indigo-900/20 backdrop-blur-xl border border-blue-400/30 rounded-3xl overflow-hidden
+         hover:from-blue-600/30 hover:to-indigo-700/30 hover:border-blue-300/50
+         transform hover:-translate-y-2 hover:rotate-1 hover:scale-105
+         transition-all duration-500 ease-out cursor-pointer
+         shadow-[0_10px_30px_rgba(59,130,246,0.2)] hover:shadow-[0_20px_50px_rgba(99,102,241,0.4)]'
+       data-aos="zoom-in" data-aos-delay="200" data-aos-once="true">
+        <CounterCard className="text-white" label={t('Mahsulotlar', 'Продукты')} value={stats.products} />
+      </div>
+      <div className='
+          bg-gradient-to-br from-blue-800/20
+         to-indigo-900/20 backdrop-blur-xl border border-blue-400/30 rounded-3xl overflow-hidden
+         hover:from-blue-600/30 hover:to-indigo-700/30 hover:border-blue-300/50
+         transform hover:-translate-y-2 hover:rotate-1 hover:scale-105
+         transition-all duration-500 ease-out cursor-pointer
+         shadow-[0_10px_30px_rgba(59,130,246,0.2)] hover:shadow-[0_20px_50px_rgba(99,102,241,0.4)]'
+       data-aos="zoom-in" data-aos-delay="300" data-aos-once="true">
+        <CounterCard className="text-white" label={t('Xodimlar', 'Сотрудники')} value={500} />
+      </div>
+      <div className='
+          bg-gradient-to-br from-blue-800/20
+         to-indigo-900/20 backdrop-blur-xl border border-blue-400/30 rounded-3xl overflow-hidden
+         hover:from-blue-600/30 hover:to-indigo-700/30 hover:border-blue-300/50
+         transform hover:-translate-y-2 hover:rotate-1 hover:scale-105
+         transition-all duration-500 ease-out cursor-pointer
+         shadow-[0_10px_30px_rgba(59,130,246,0.2)] hover:shadow-[0_20px_50px_rgba(99,102,241,0.4)]'
+       data-aos="zoom-in" data-aos-delay="400" data-aos-once="true">
+        <CounterCard className="text-white" label={t('Mamlakatlar', 'Страны')} value={30} />
+      </div>
+      <div className='
+          bg-gradient-to-br from-blue-800/20
+         to-indigo-900/20 backdrop-blur-xl border border-blue-400/30 rounded-3xl overflow-hidden
+         hover:from-blue-600/30 hover:to-indigo-700/30 hover:border-blue-300/50
+         transform hover:-translate-y-2 hover:rotate-1 hover:scale-105
+         transition-all duration-500 ease-out cursor-pointer
+         shadow-[0_10px_30px_rgba(59,130,246,0.2)] hover:shadow-[0_20px_50px_rgba(99,102,241,0.4)]'
+       data-aos="zoom-in" data-aos-delay="500" data-aos-once="true">
+        <CounterCard className="text-white" label={t('Yangiliklar', 'Новости')} value={stats.news} />
+      </div>
+    </div>
   </div>
+</section>
 
+      {/* YANGI BO'LIM: 3D Zavod + "NAMANGAN MASH" banner */}
+      <div className='max-[1000px]:hidden'>
+        <section className="min-h-screen bg-gradient-to-b from-[#222] to-[#4545DA] relative overflow-hidden ">
+          <canvas ref={factoryCanvasRef} className="absolute inset-0 w-full h-full opacity-100" />
+        </section>
+      </div>
 
      {/* product  */}
     <Product />
 
+{/* // Features Section - faqat bir marta animatsiya */}
+<section className="py-20 bg-[#4545DA] relative overflow-hidden">
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div className="text-center mb-16">
+      <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4 drop-shadow-lg">
+        {t('Nima uchun bizni tanlashadi?', 'Почему выбирают нас?')}
+      </h2>
+      <p className="text-xl text-blue-200 max-w-2xl mx-auto">
+        {t('Bizning afzalliklarimiz va muvaffaqiyat kalitlari', 'Наши преимущества и ключи к успеху')}
+      </p>
+    </div>
 
-      {/* Features Section */}
-      <section className="py-20 bg-[#4545DA] relative overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4 drop-shadow-lg">
-              {t('Nima uchun bizni tanlashadi?', 'Почему выбирают нас?')}
-            </h2>
-            <p className="text-xl text-blue-200 max-w-2xl mx-auto">
-              {t('Bizning afzalliklarimiz va muvaffaqiyat kalitlari', 'Наши преимущества и ключи к успеху')}
-            </p>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {features.map((feature, index) => (
+        <div
+          key={index}
+          data-aos="fade-up"
+          data-aos-delay={index * 100}
+          data-aos-once="true" // ✅ Faqat bir marta animatsiya
+          className="group relative p-8 bg-gradient-to-br from-blue-800/20
+                   to-indigo-900/20 backdrop-blur-xl border border-blue-400/30 rounded-3xl overflow-hidden
+                   hover:from-blue-600/30 hover:to-indigo-700/30 hover:border-blue-300/50
+                   transform hover:-translate-y-2 hover:rotate-1 hover:scale-105
+                   transition-all duration-500 ease-out
+                   shadow-[0_10px_30px_rgba(59,130,246,0.2)] hover:shadow-[0_20px_50px_rgba(99,102,241,0.4)]"
+        >
+          <div className="relative mb-6 z-10">
+            <div className="bg-gradient-to-r text-white from-blue-500 to-indigo-600 rounded-2xl p-4 inline-block shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
+              {feature.icon}
+            </div>
           </div>
-
-          <div ref={sectionRef2} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div
-                key={feature.id}
-                className={`fade-zoom-up ${visible2 ? "show" : ""} group relative p-8 bg-gradient-to-br from-blue-800/20
-                     to-indigo-900/20 backdrop-blur-xl border border-blue-400/30 rounded-3xl overflow-hidden
-                     hover:from-blue-600/30 hover:to-indigo-700/30 hover:border-blue-300/50
-                     transform hover:-translate-y-2 hover:rotate-1 hover:scale-105
-                     transition-all duration-500 ease-out
-                     shadow-[0_10px_30px_rgba(59,130,246,0.2)] hover:shadow-[0_20px_50px_rgba(99,102,241,0.4)]`}
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="relative mb-6 z-10">
-                  <div className="bg-gradient-to-r text-white from-blue-500 to-indigo-600 rounded-2xl p-4 inline-block shadow-xl group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
-                    {feature.icon}
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3 relative z-10 drop-shadow-md">
-                  {feature.title}
-                </h3>
-                <p className="text-blue-100 text-sm leading-relaxed relative z-10">
-                  {feature.description}
-                </p>
-              </div>
-            ))}
-          </div>
+          <h3 className="text-xl font-bold text-white mb-3 relative z-10 drop-shadow-md">
+            {feature.title}
+          </h3>
+          <p className="text-blue-100 text-sm leading-relaxed relative z-10">
+            {feature.description}
+          </p>
         </div>
-      </section>
-
-
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* CTA Section */}
       <section className="py-20 bg-[#4545DA]">
