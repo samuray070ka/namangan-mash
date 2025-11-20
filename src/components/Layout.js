@@ -109,11 +109,10 @@ const Layout = () => {
                   key={link.path}
                   to={link.path}
                   data-testid={`nav-link-${link.path}`}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                    location.pathname === link.path
-                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/30'
-                      : 'text-gray-700 hover:bg-white/50 hover:text-blue-600'
-                  }`}
+                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${location.pathname === link.path
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/30'
+                    : 'text-gray-700 hover:bg-white/50 hover:text-blue-600'
+                    }`}
                 >
                   {link.label}
                 </Link>
@@ -202,15 +201,15 @@ const Layout = () => {
                 }
               </button>
 
-                            {/* User Profile */}
-              <button className='relative bg-gradient-to-r from-blue-600 to-indigo-600 text-white transform hover:scale-105 transition-all duration-300 rounded-full text-lg p-2 lg:p-3 group cursor-pointer animate-nav_logo2
+              {/* User Profile */}
+              <Link to={'/login'}>
+                <button className='relative bg-gradient-to-r from-blue-600 to-indigo-600 text-white transform hover:scale-105 transition-all duration-300 rounded-full text-lg p-2 lg:p-3 group cursor-pointer animate-nav_logo2
                 md:p-3 md:text-base
                 max-sm:p-3 max-sm:text-[20px]'>
-                <Link to={'/login'}>
                   <AiOutlineUser className="md:w-4 md:h-4 max-sm:w-3 max-sm:h-3" />
 
-                </Link>
-              </button>
+                </button>
+              </Link>
             </div>
           </div>
 
@@ -225,11 +224,10 @@ const Layout = () => {
                   data-testid={`mobile-nav-link-${link.path}`}
                   className={`block px-4 animate-nav_logo2 py-3 rounded-lg font-medium transition-all duration-300 mb-2
                     md:py-2.5
-                    sm:py-2 sm:text-sm ${
-                    location.pathname === link.path
+                    sm:py-2 sm:text-sm ${location.pathname === link.path
                       ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white'
                       : 'bg-white text-gray-700 hover:bg-white'
-                  }`}
+                    }`}
                 >
                   {link.label}
                 </Link>

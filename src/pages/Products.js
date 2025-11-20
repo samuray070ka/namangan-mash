@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Search, Filter, ChevronRight } from 'lucide-react';
@@ -6,6 +6,135 @@ import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `https://tokenized.pythonanywhere.com/api`;
+
+// Custom Select Komponenti
+const CustomSelect = ({ value, onChange, options, placeholder, t }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSelect = (optionValue) => {
+    onChange(optionValue);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="relative w-full" ref={dropdownRef}>
+      {/* Select trigger */}
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className="
+          w-full
+          pl-12 pr-5 py-3.5
+          bg-white/90
+          backdrop-blur-sm
+          rounded-xl
+          border-2 border-transparent
+          focus:border-indigo-500
+          focus:outline-none
+          transition-all
+          duration-300
+          cursor-pointer
+          shadow-[0px_0_8px_0px_rgba(30,144,255,0.3)]
+          text-gray-800
+          font-medium
+          hover:shadow-[0px_0_12px_0px_rgba(30,144,255,0.4)]
+          hover:bg-white
+          flex
+          items-center
+          justify-between
+          relative
+          z-10
+        "
+      >
+        <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-indigo-500 w-5 h-5 z-10" />
+        <span>
+          {value === 'all'
+            ? placeholder
+            : options.find(opt => opt.value === value)?.label || value
+          }
+        </span>
+
+        {/* Dropdown icon */}
+        <svg
+          className={`w-5 h-5 text-indigo-600 transition-transform duration-300 ml-3 ${isOpen ? 'rotate-180' : ''
+            }`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+
+      {/* Dropdown menu */}
+      {isOpen && (
+        <div className="
+          absolute
+          top-full
+          left-0
+          right-0
+          mt-2
+          bg-white/95
+          backdrop-blur-sm
+          rounded-xl
+          border
+          border-gray-200
+          shadow-2xl
+          z-50
+          max-h-60
+          overflow-y-auto
+          transform
+          transition-all
+          duration-300
+          ease-out
+        ">
+          {options.map((option, index) => (
+            <div
+              key={option.value}
+              onClick={() => handleSelect(option.value)}
+              className={`
+                px-2
+                py-1
+                cursor-pointer
+                transition-all
+                duration-200
+                ease-in-out
+                border-b
+                border-gray-100
+                first:rounded-t-xl
+                last:rounded-b-xl
+                last:border-b-0
+                hover:bg-gradient-to-r
+                hover:from-indigo-50
+                hover:to-purple-50
+                hover:text-indigo-700
+                hover:font-semibold
+                hover:pl-4
+                ${value === option.value
+                  ? 'bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-700 font-semibold pl-8'
+                  : 'text-gray-700'
+                }
+              `}
+            >
+              {option.label}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const Products = () => {
   const { language, t } = useLanguage();
@@ -70,6 +199,12 @@ const Products = () => {
     setFilteredProducts(filtered);
   };
 
+  // Category options for custom select
+  const categoryOptions = [
+    { value: 'all', label: t('Barcha kategoriyalar', 'Все категории') },
+    ...categories.map(cat => ({ value: cat, label: cat }))
+  ];
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -97,62 +232,49 @@ const Products = () => {
           </p>
         </div>
       </section>
-      
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Filters - YANGILANGAN QISM */}
         <div className="mb-8 space-y-4">
           <div className="flex flex-col justify-start lg:flex-row gap-4">
-            {/* Search - Yangi dizayn */}
-              <div className="relative group">
+            {/* Search */}
+            <div className="relative group">
               <div className="relative">
-  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-500 w-5 h-5 z-10" />
-  <input
-    type="text"
-    placeholder={t('Mahsulot qidirish...', 'Поиск продуктов...')}
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    data-testid="product-search-input"
-    className="w-[350px] pl-12 pr-4 py-3.5 bg-white/90 rounded-xl border-2 border-transparent focus:border-blue-500 focus:outline-none transition-all duration-300 shadow-[0px_0_8px_0px_rgba(30,144,255,0.3)] relative z-5"
-  />
-</div>
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-500 w-5 h-5 z-10" />
+                <input
+                  type="text"
+                  placeholder={t('Mahsulot qidirish...', 'Поиск продуктов...')}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  data-testid="product-search-input"
+                  className="w-full lg:w-[350px] pl-12 pr-4 py-3.5 bg-white/90 rounded-xl border-2 border-transparent focus:border-blue-500 focus:outline-none transition-all duration-300 shadow-[0px_0_8px_0px_rgba(30,144,255,0.3)] relative z-5"
+                />
               </div>
+            </div>
 
-            {/* Category Filter - Yangi dizayn */}
-            <div className="lg:w-64">
-              <div className="relative group d">
-
+            {/* Category Filter - ENDI CUSTOM SELECT */}
+            <div className="lg:w-68">
+              <div className="relative group">
                 <div className="relative">
-                  <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-indigo-500 w-5 h-5 z-10" />
-                  <select
+                  <CustomSelect
                     value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                    data-testid="category-filter"
-                    className="w-full pl-12 pr-10 py-3.5 bg-white/90 backdrop-blur-sm rounded-xl border-2 border-transparent focus:border-indigo-500 focus:outline-none transition-all duration-300   appearance-none cursor-pointer relative shadow-[0px_0_8px_0px_rgba(30,144,255,0.3)] z-5"
-                  >
-                    <option value="all">{t('Barcha kategoriyalar', 'Все категории')}</option>
-                    {categories.map((cat, index) => (
-                      <option key={index} value={cat}>{cat}</option>
-                    ))}
-                  </select>
-                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none z-10">
-                    <svg className="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
+                    onChange={setSelectedCategory}
+                    options={categoryOptions}
+                    placeholder={t('Barcha kategoriyalar', 'Все категории')}
+                    t={t}
+                  />
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Results count - Yangi dizayn */}
+          {/* Results count */}
           <div className="flex items-center" data-testid="products-count">
             <div className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full text-sm font-medium shadow-lg">
               {t(`${filteredProducts.length} ta mahsulot topildi`, `Найдено ${filteredProducts.length} продуктов`)}
             </div>
           </div>
         </div>
-        
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
